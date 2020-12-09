@@ -7,7 +7,10 @@ import com.example.demo.model.entity.Product;
 import com.example.demo.repository.CustomerRepository;
 import com.example.demo.repository.OrderRepository;
 import com.example.demo.repository.ProductRepository;
+import com.example.demo.service.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
@@ -20,19 +23,13 @@ import java.util.Optional;
 @RestController
 public class GreetingController {
 
-
     @Autowired
-    private CustomerRepository customerRepository;
-
-    @Autowired
-    private ProductRepository productRepository;
-
-    @Autowired
-    private OrderRepository orderRepository;
+    private OrderService orderService;
 
     @GetMapping("/getId/{id}")
-    public List<String> hello(@PathVariable("id")Long id) {
-        List<String> ordersCount = orderRepository.countOrdersGroupByCustomers();
-        return ordersCount;
+    public ResponseEntity<List<String>> hello(@PathVariable("id")Long id) {
+        List<String> ordersCount = orderService.countOrders(id);
+
+        return new ResponseEntity<>(ordersCount, HttpStatus.ACCEPTED);
     }
 }
